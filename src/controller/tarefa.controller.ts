@@ -63,6 +63,11 @@ class tarefaController {
         const tarefaMaiorDescricao = await tarefaService.filtraTarefaDescricaoMaior()
         return res.status(200).json(tarefaMaiorDescricao)
     }
+
+    async calculaMediaConclusao(req:Request, res: Response) {
+        const media = await tarefaService.calculaMediaDeConclusao()
+        return res.status(200).json(media)
+    }
 }
 
 export default new tarefaController()

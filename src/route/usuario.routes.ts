@@ -9,7 +9,7 @@ routesUsuario.post('/usuarios', [
     ValidationMiddleware.validatePayload(ValidateUsuario.cadastraUsuario(), 'body')
 ], usuariosController.cadastroUsuario);
 
-routesUsuario.get('/usuarios/login',[
+routesUsuario.get('/usuarios/login', [
     ValidationMiddleware.validatePayload(ValidateUsuario.loginUsuario(), 'body')
 ], usuariosController.login);
 

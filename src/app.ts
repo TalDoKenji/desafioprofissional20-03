@@ -27,7 +27,7 @@ class App {
     private async database() {
         try {
             mongoose.set("strictQuery", true)
-            await mongoose.connect('mongodb://0.0.0.0:27017/atividade-20-03')
+            await mongoose.connect('mongodb://0.0.0.0:27017/')
             console.log("connect database success")
         } catch (error) {
             console.error('Cannot connect to database, error:', error)

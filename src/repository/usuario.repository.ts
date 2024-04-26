@@ -1,26 +1,32 @@
 import { Document } from 'mongoose';
-import { error } from "console";
 import { IUsuario } from '../type/usuario';
 import usuariosSchema from "../schema/usuarios.schema";
 import { DuplicatedContentError } from "../errors/duplicatedContentError";
 import { IUsuarioLogin } from "../dto/usuarioLogin";
 import { NotFoundError } from "../errors/notFoundError";
 import bcrypt from 'bcrypt'
-import { UnauthorizedError } from "../errors/UnauthorizedError";
+import { UnauthorizedError } from '../errors/unauthorizedError';
 
 class usuarioRepository {
 
     async cadastro(usuario: IUsuario) {
         const _usuario = await usuariosSchema.findOne({ email: usuario.email })
-        if (_usuario) {
-            throw new DuplicatedContentError('email já está cadastrado!')
+        if (!_usuario) {
+            const novoUsuario = {
+                nome: usuario.nome,
+                peso: usuario.peso,
+                email: usuario.email,
+                senha: await bcrypt.hash(usuario.senha, 10)
+            }
+            return await usuariosSchema.create(novoUsuario)
         }
-        const novoUsuario = await usuariosSchema.create(usuario)
-        return novoUsuario
+        throw new DuplicatedContentError('email já está cadastrado!')
+
     }
 
-    async login(usuario: IUsuarioLogin): Promise<Document> {
+    async login(usuario: IUsuarioLogin) {
         const _usuario = await usuariosSchema.findOne({ email: usuario.email })
+
         if (!_usuario) {
             throw new NotFoundError('Usuario não encontrado. Por favor, realize o cadastro')
         }
@@ -31,5 +37,6 @@ class usuarioRepository {
         throw new UnauthorizedError('Credenciais incorretas')
     }
 }
+
 
 export default new usuarioRepository()

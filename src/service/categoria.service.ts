@@ -1,35 +1,34 @@
-import { ObjectId } from 'mongoose';
 import categoriaSchema from "../schema/categoria.schema";
 import { ICategoria } from "../type/categoria";
 import tarefasSchema from '../schema/tarefas.schema';
+import categoriaRepository from "../repository/categoria.repository";
+import tarefaRepository from "../repository/tarefa.repository";
+import { ObjectId } from "mongoose";
 
 class categoriaService {
 
     async criaCategoria(categoria: ICategoria) {
-        const novaCategoria = await categoriaSchema.create(categoria)
+        const novaCategoria = await categoriaRepository.criaCategoria(categoria)
         return novaCategoria
     }
 
-    async buscaCategoria(id: String) {
-        const categoria = await categoriaSchema.findById(id)
+    async buscaCategoria(idCategoria: string) {
+        const categoria = await categoriaRepository.buscaCategoria(idCategoria)
         return categoria
     }
 
     async buscaCategoriasPorUsuario(idUsuario: string) {
-        const categoria = await tarefasSchema.aggregate([
-            { $match: { usuarioAssociado: idUsuario } },
-            { $group: { _id: '$categoria' } }
-        ])
+        const categoria = await categoriaRepository.buscaCategoriasPorUsuario(idUsuario)
         return categoria
     }
 
-    async atualizaCategoria(id: String, categoria: ICategoria) {
-        const categoriaAtualizada = await categoriaSchema.findByIdAndUpdate(id, categoria, { new: true })
+    async atualizaCategoria(idCategoria: string, categoria: ICategoria) {
+        const categoriaAtualizada = await categoriaRepository.atualizaCategoria(idCategoria, categoria)
         return categoriaAtualizada
     }
 
-    async deletaCategoria(id: String) {
-        await categoriaSchema.findByIdAndDelete(id)
+    async deletaCategoria(idCategoria: string) {
+        await categoriaRepository.deletaCategoria(idCategoria)
     }
 }
 

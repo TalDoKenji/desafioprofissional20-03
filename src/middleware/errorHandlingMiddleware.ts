@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { apiError } from "../errors/apiError";
 import Joi from "joi";
 import { StatusCodes } from "http-status-codes";
+import mongoose from "mongoose";
 
 class errorHandlingMiddleware {
 
@@ -13,7 +14,11 @@ class errorHandlingMiddleware {
             res.status(status).json({ success: false, mensagem })
         }
         else if (erro instanceof Joi.ValidationError) {
-            const mensagem = 'Erro no Joi'
+            const mensagem = 'Revise os dados inseridos.'
+            res.status(StatusCodes.BAD_REQUEST).json({ success: false, mensagem })
+        }
+        else if (erro instanceof mongoose.Error.CastError) {
+            const mensagem = 'Revise as informações inseridas na rota'
             res.status(StatusCodes.BAD_REQUEST).json({ success: false, mensagem })
         }
         else {

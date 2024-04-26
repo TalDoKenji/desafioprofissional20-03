@@ -1,4 +1,3 @@
-import usuarioSchema from "../schema/usuarios.schema";
 import { IUsuario } from "../type/usuario";
 import { IUsuarioLogin } from '../dto/usuarioLogin';
 import usuarioRepository from '../repository/usuario.repository';
@@ -9,15 +8,15 @@ class usuarioService {
     
 
     async cadastroUsuario(usuario: IUsuario) {
-
         const novoUsuario = await usuarioRepository.cadastro(usuario)
+        
         return novoUsuario
     }
 
 
     async login(usuario: IUsuarioLogin) {
         const _usuario = await usuarioRepository.login(usuario)
-        const idUsuario = _usuario._id
+        const idUsuario = _usuario!.id
         const token = jwt.sign({ idUsuario }, configServidor.SECRET_KEY!)
 
         return token

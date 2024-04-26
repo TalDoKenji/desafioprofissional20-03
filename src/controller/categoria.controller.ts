@@ -1,6 +1,7 @@
+import { ObjectId } from 'mongoose';
 import { Request, Response } from "express";
 import categoriaService from "../service/categoria.service";
-
+import { IAuthenticatedRequest } from '../type/AuthenticatedRequest';
 class categoriaController {
 
     async criaCategoria(req: Request, res: Response) {
@@ -15,10 +16,10 @@ class categoriaController {
 
     async buscaCategoriaPorUsuario(req: Request, res: Response) {
         const categoria = await categoriaService.buscaCategoriasPorUsuario(req.params.id)
-        return res.status(200).json(categoria)  
+        return res.status(200).json(categoria) 
     }
 
-    async atualizaCategoria(req:Request, res: Response) {
+    async atualizaCategoria(req: Request, res: Response) {
         const categoriaAtualizada = await categoriaService.atualizaCategoria(req.params.id, req.body)
         return res.status(200).json(categoriaAtualizada) 
     }
